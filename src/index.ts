@@ -30,18 +30,17 @@ prog
     .command('build')
     .describe('Build the source for imports and clients.')
     .action(async () => {
-        // Compile the source.css file for imports.
-        await compileTheme('source');
+        const types: ('source' | 'betterdiscord' | 'userstyle')[] = [ 'source' ];
 
-        // Creates the .theme.css file if a meta exists.
         if (themeConfig.meta.betterdiscord) {
-            await compileTheme('bd');
+            types.push('betterdiscord');
         }
 
-        // Creates the .user.css file if a meta exists.
         if (themeConfig.meta.userstyle) {
-            await compileTheme('userstyle');
+            types.push('userstyle');
         }
+
+        await compileTheme(types);
     });
 
 prog.parse(process.argv);
