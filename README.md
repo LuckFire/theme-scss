@@ -21,7 +21,7 @@ For configuration, create a `theme-config.json` file in the root of your reposit
 |`dev`|no|For development of your theme.|
 
 #### Default Meta
-Some metas will use the same values since they have the same properties. In the future, you may not have to provide a default meta period since it can reference these from any available `package.json`` file.
+Some metas will use the same values since they have the same properties. In the future, you may not have to provide a default meta period since it can reference these from any available `package.json` file.
 
 Any defaults do not have to be provided again in other metas.
 |Value|Required|Purpose|
