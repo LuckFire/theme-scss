@@ -3,9 +3,9 @@ import { themeConfig } from "./config.js";
 import { getThemeFolder } from "./os.js";
 
 /** The theme author. */
-const themeAuthor = themeConfig.meta.default.author.toLocaleLowerCase();
+const themeAuthor = themeConfig.meta.author?.toLocaleLowerCase();
 /** The name of the theme. */
-export const themeName = themeConfig.meta.default.name.toLocaleLowerCase().split(' ').join('-');
+export const themeName = themeConfig.meta.name?.toLocaleLowerCase().split(' ').join('-');
 
 /** The @import for the theme's source. */
 export const themeImport = themeConfig.import || `https://${themeAuthor}.github.io/${themeName}/${themeConfig.dist?.output?.dir || 'src'}/${themeConfig.dist?.output?.file || 'source.css'}`;

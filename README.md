@@ -20,26 +20,24 @@ For configuration, create a `theme-config.json` file in the root of your reposit
 |`dist`|no|The distribution of your theme. This is what's used when the theme is being built.|
 |`dev`|no|For development of your theme.|
 
-#### Default Meta
-Some metas will use the same values since they have the same properties. In the future, you may not have to provide a default meta period since it can reference these from any available `package.json` file.
-
-Any defaults do not have to be provided again in other metas.
+#### Meta
+Some metas will use the same values since they have the same properties. If you have a `package.json` with these values, you are not required to put them in the config file. Any defaults do not have to be provided again in other metas.
 |Value|Required|Purpose|
 |--|--|--|
 |`name`|yes|The name of the theme.|
 |`author`|yes|The name of the author who created the theme|
 |`version`|no|The current version of the theme. If not set, it will use it from your package.json if available.|
 |`description`|no|The description of the theme.|
+|`betterdiscord`|no|BetterDiscord meta. Refer to [this section](https://github.com/LuckFire/theme-scss#betterdiscord-meta)|
+|`userstyle`|no|Userstyle meta. Refer to [this section](https://github.com/LuckFire/theme-scss#userstyle-meta)|
 
 ##### Example
 ```json
 {
     "meta": {
-        "default": {
-            "name": "AMOLED-Cord",
-            "author": "LuckFire",
-            "description": "A basically pitch black theme for Discord. Lights out, baby!"
-        }
+        "name": "AMOLED-Cord",
+        "author": "LuckFire",
+        "description": "A basically pitch black theme for Discord. Lights out, baby!"
     }
 }
 ```
@@ -51,6 +49,9 @@ You can find all acceptable meta tags for BetterDiscord in their [documentations
 ```json
 {
     "meta": {
+        "name": "AMOLED-Cord",
+        "author": "LuckFire",
+        "description": "A basically pitch black theme for Discord. Lights out, baby!",
         "betterdiscord": {
             "invite": "vYdXbEzqDs",
             "authorId": "399416615742996480",
@@ -68,6 +69,9 @@ You can find all acceptable meta tags for Stylus in their [wiki documentation pa
 ```json
 {
     "meta": {
+        "name": "AMOLED-Cord",
+        "author": "LuckFire",
+        "description": "A basically pitch black theme for Discord. Lights out, baby!",
         "userstyle": {
             "namespace": "https://github.com/discord-extensions/amoled-cord",
             "license": "MIT"

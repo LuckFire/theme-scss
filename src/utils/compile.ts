@@ -15,7 +15,6 @@ export const compiledSCSS = compile(paths.source, { style: 'expanded' }).css;
  */
 export async function compileTheme(type: 'source' | 'bd' | 'userstyle' | 'dev') {
     const start = Date.now();
-
     logger.notices.compiling(`Compiling for ${type} from ${logger.dye.yellow(paths.source)}`);
 
     try {

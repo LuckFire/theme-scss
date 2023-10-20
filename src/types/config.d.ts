@@ -71,7 +71,7 @@ export interface DefaultMeta {
      * The current version of the theme.
      * If not set, will try to use the package.json version.
      */
-    version?: string;
+    version: string;
     /**
      * A description of the theme.
      */
@@ -80,15 +80,28 @@ export interface DefaultMeta {
 
 export interface Meta {
     /**
-     * Default values that are shared across all metas.
+     * The name of the theme.
      */
-    default: DefaultMeta;
+    name: string;
+    /**
+     * The author of the theme.
+     */
+    author: string;
+    /**
+     * The current version of the theme.
+     * If not set, will try to use the package.json version.
+     */
+    version: string;
+    /**
+     * A description of the theme.
+     */
+    description?: string;
     /**
      * BetterDiscord's meta.
      */
     betterdiscord?: BetterDiscordMeta;
     /**
-     * Stylus' UserStyle meta.
+     * sUserStyle meta.
      */
     userstyle?: UserStyleMeta;
 }

@@ -49,31 +49,48 @@ function metaList(meta: { [key: string]: any }) {
  * Not exported since once it's fetched, it shouldnt have to be fetched again.
  */
 function getDefaultMeta() {
-    const { meta } = themeConfig;
+    const { name, author, description, version } = themeConfig.meta;
+    const meta = { name, author, description, version };
+    const missing = [];
 
-    // Checks whether meta or meta.default has any existing properties.
-    if (!meta || !meta.default) {
-        logger.notices.error('Your meta is missing default meta information.', true);
-        return null;
+    // Create a list of missing default meta values
+    for (const [k, v] of Object.entries(meta)) {
+        if (v) continue;
+        missing.push(k);
     }
 
-    // Checks whether meta.default has the required properties (author, name).
-    if (meta.default && !(meta.default.author || meta.default.name)) {
-        logger.notices.error('Your meta is missing an author and or theme name.', true);
-        return;
-    }
-    if (!meta.default.version) {
+    // If there are any missing values, it'll check the package.json instead to fill them.
+    if (missing.length) {
         try {
             const packageInfo = JSON.parse(readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'));
-    
-            meta.default.version = packageInfo.version;
+
+            for (const value of Object.values(missing)) {
+                if (!packageInfo[value]) {
+                    // Since description isn't required, it'll just remove it.
+                    if (value === 'description') {
+                        delete meta[value];
+                        missing.splice(missing.indexOf(value), 1);
+                    }
+
+                    continue;
+                }
+                
+                meta[value] = packageInfo[value];
+                missing.splice(missing.indexOf(value), 1);
+            }
+
+            // If it was unable to fill these values, it'll error and stop.
+            if (missing.length) {
+                logger.notices.error(`You are missing some meta values (${missing.join(', ')}). There was an attempt to check for an existing ${logger.dye.yellow('package.json')} to automatically fill them, but it did not have some of the required ones.`, true);
+                return null;
+            }
         } catch (err) {
-            logger.notices.error('You did not provide a version in your meta. There was an attempt to use your package.json file, but that also does not exist.', true);
+            logger.notices.error(`You are missing some meta values (${missing.join(', ')}). There was an attempt to check for an existing ${logger.dye.yellow('package.json')} to automatically fill them, but something went wrong.`, true);
             return null;
         }
     }
 
-    return metaList(meta.default);
+    return metaList(meta);
 };
 
 /**
