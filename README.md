@@ -26,10 +26,10 @@ Some metas will use the same values since they have the same properties. If you 
 |--|--|--|
 |`name`|yes|The name of the theme.|
 |`author`|yes|The name of the author who created the theme|
-|`version`|no|The current version of the theme. If not set, it will use it from your package.json if available.|
+|`version`|no|The current version of the theme.|
 |`description`|no|The description of the theme.|
-|`betterdiscord`|no|BetterDiscord meta. Refer to [this section](https://github.com/LuckFire/theme-scss#betterdiscord-meta)|
-|`userstyle`|no|Userstyle meta. Refer to [this section](https://github.com/LuckFire/theme-scss#userstyle-meta)|
+|`betterdiscord`|no|BetterDiscord meta. Refer to [this section](https://github.com/LuckFire/theme-scss#betterdiscord-meta).|
+|`userstyle`|no|Userstyle meta. Refer to [this section](https://github.com/LuckFire/theme-scss#userstyle-meta).|
 
 ##### Example
 ```json
