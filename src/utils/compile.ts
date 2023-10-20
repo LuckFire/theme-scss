@@ -58,7 +58,6 @@ export async function compileTheme(type: 'source' | 'bd' | 'userstyle' | 'dev') 
                 writeFileSync(paths.dev,
                     getBDMeta()
                     + '\n\n'
-                    + `@import url(${themeImport});\n\n`
                     + compile(paths.source, { style: 'expanded' }).css
                 );
 
