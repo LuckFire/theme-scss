@@ -1,0 +1,27 @@
+{
+  "name": "theme-scss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "theme-scss": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc -b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "sade": "^1.8.1",
+    "sass": "^1.69.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.3",
+    "chalk": "^5.3.0",
+    "typescript": "^5.2.2"
+  }
+}
