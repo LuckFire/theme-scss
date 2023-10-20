@@ -29,7 +29,7 @@ export async function compileTheme(type: 'source' | 'bd' | 'userstyle' | 'dev') 
                 writeFileSync(paths.clients.betterdiscord,
                     getBDMeta()
                     + '\n\n'
-                    + `@import url(${themeImport});\n\n`
+                    + `@import url("${themeImport}");\n\n`
                     + compiledSCSS
                 );
 
@@ -43,7 +43,7 @@ export async function compileTheme(type: 'source' | 'bd' | 'userstyle' | 'dev') 
                 writeFileSync(paths.clients.userstyle,
                     `@-moz-document domain("discord.com") {\n`
                     + getUserstyleMeta() + '\n'
-                    + `\n\t@import url(${themeImport});\n\n`
+                    + `\n\t@import url("${themeImport}");\n\n`
                     + compiledSCSS.replace(/^/gm, "\t")
                     + `\n}`
                 );
