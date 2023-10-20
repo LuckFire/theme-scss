@@ -44,11 +44,7 @@ function metaList(meta: { [key: string]: any }) {
     return details;
 }
 
-/**
- * Fetches the default meta information.
- * Not exported since once it's fetched, it shouldnt have to be fetched again.
- */
-function getDefaultMeta() {
+function getDefaultValues() {
     const { name, author, description, version } = themeConfig.meta;
     const meta = { name, author, description, version };
     const missing = [];
@@ -90,13 +86,16 @@ function getDefaultMeta() {
         }
     }
 
-    return metaList(meta);
-};
+    return meta;
+}
+
+export const defaultValues = getDefaultValues();
 
 /**
  * Fetches the default meta information.
+ * Not exported since once it's fetched, it shouldnt have to be fetched again.
  */
-export const defaultMeta = getDefaultMeta();
+const defaultMeta = metaList(defaultValues);
 
 /**
  * Gets the BetterDiscord meta.
