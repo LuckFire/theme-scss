@@ -50,12 +50,12 @@ export async function compileTheme(type: 'source' | 'bd' | 'userstyle' | 'dev') 
 
                 break;
             case 'dev':
-                if (!existsSync(paths.dev)) {
+                if (!existsSync(paths.dev.folder)) {
                     logger.notices.error('Dev folder does not exist.', true);
                     return;
                 }
 
-                writeFileSync(paths.dev,
+                writeFileSync(paths.dev.theme,
                     getBDMeta()
                     + '\n\n'
                     + compile(paths.source, { style: 'expanded' }).css

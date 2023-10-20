@@ -11,7 +11,10 @@ export const themeName = themeConfig.meta.default.name.toLocaleLowerCase().split
 export const themeImport = themeConfig.import || `https://${themeAuthor}.github.io/${themeName}/${themeConfig.dist?.output?.dir || 'src'}/${themeConfig.dist?.output?.file || 'source.css'}`;
 /** Default paths for easy use. */
 export const paths = {
-    dev: path.join(getThemeFolder(themeConfig.dev?.mode || 'bd'), `${themeName}.theme.css`),
+    dev: {
+        folder: getThemeFolder(themeConfig.dev?.mode || 'bd'),
+        theme: path.join(getThemeFolder(themeConfig.dev?.mode || 'bd'), `${themeName}.theme.css`)
+    },
     source: path.resolve(themeConfig.dist?.target || 'src/source.scss'),
     output: path.resolve(themeConfig.dist?.output?.dir || 'src', themeConfig.dist?.output?.file || 'source.css'),
     clients: {
