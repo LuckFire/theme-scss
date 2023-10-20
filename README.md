@@ -16,16 +16,16 @@ For configuration, create a `theme-config.json` file in the root of your reposit
 |Value|Required|Purpose|
 |--|--|--|
 |`import`|no|A custom import URL for your theme. It'll try to default based on the author name provided, but at times you may need to provide one.|
-|`meta`|yes|The meta information. This is where `default`, `betterdiscord`, and `userstyle` meta information will go.|
-|`dist`|no|The distribution of your theme. This is what's used when the theme is being built.|
-|`dev`|no|For development of your theme.|
+|`meta`|yes|The meta information. Refer to [this section](https://github.com/LuckFire/theme-scss#meta).|
+|`dist`|no|The distribution of your theme. This is what's used when the theme is being built. Refer to [this section](https://github.com/LuckFire/theme-scss#distribution).|
+|`dev`|no|For development of your theme. Refer to [this section](https://github.com/LuckFire/theme-scss#development).|
 
 #### Meta
 Some metas will use the same values since they have the same properties. If you have a `package.json` with these values, you are not required to put them in the config file. Any defaults do not have to be provided again in other metas.
 |Value|Required|Purpose|
 |--|--|--|
 |`name`|yes|The name of the theme.|
-|`author`|yes|The name of the author who created the theme|
+|`author`|yes|The name of the author who created the theme.|
 |`version`|no|The current version of the theme.|
 |`description`|no|The description of the theme.|
 |`betterdiscord`|no|BetterDiscord meta. Refer to [this section](https://github.com/LuckFire/theme-scss#betterdiscord-meta).|
