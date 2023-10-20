@@ -11,9 +11,8 @@ function getOS() {
             return 'WINDOWS';
         case 'darwin':
             return 'MACOS';
-        // Until I can get this added properly..
-        // case 'linux':
-        //     return 'LINUX';
+        case 'linux':
+            return 'LINUX';
         default: 
             logger.notices.error(`${process.platform} is not supported for development.`, true);
             return null;
@@ -35,16 +34,24 @@ export function getThemeFolder(mod: 'bd' | 'vencord') {
         case 'bd':
             if (OS === 'WINDOWS') {
                 folder = path.resolve(process.env.APPDATA, 'BetterDiscord', 'themes');
-            } else {
+            }
+            else if (OS === 'MACOS') {
                 folder = path.resolve(process.env.HOME, 'Library', 'Application Support', 'BetterDiscord', 'themes');
+            }
+            else if (OS === 'LINUX') {
+                folder = path.resolve(process.env.HOME, '.local', 'share', 'BetterDiscord', 'themes');
             }
 
             break;
         case 'vencord':
             if (OS === 'WINDOWS') {
                 folder = path.resolve(process.env.APPDATA, 'Vencord', 'themes');
-            } else {
+            }
+            else if (OS === 'MACOS') {
                 folder = path.resolve(process.env.HOME, 'Library', 'Application Support', 'Vencord', 'themes');
+            }
+            else if (OS === 'LINUX') {
+                folder = path.resolve(process.env.HOME, 'user', '.config', 'Vencord', 'themes');
             }
 
             break;
