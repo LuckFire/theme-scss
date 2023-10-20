@@ -14,7 +14,7 @@ prog
     .describe('Watch for changes and automatically compile them into the desired folder.')
     .action(async () => {
         chokidar
-            .watch('src')
+            .watch('src/**/*.scss')
             .on('ready', async () => {
                 logger.notices.info(`Watching ${logger.dye.yellow('src')} for changes.`);
 
