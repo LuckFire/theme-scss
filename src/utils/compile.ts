@@ -5,7 +5,7 @@ import logger from "./logger.js";
 import { getBDMeta, getUserstyleMeta } from "./config.js";
 
 /**
- * The compiled SCSS.
+ * The compiled SCSS. Only used for distribution, development will always recompile.
  */
 export const compiledSCSS = compile(paths.source, { style: 'expanded' }).css;
 
@@ -59,16 +59,11 @@ export async function compileTheme(type: 'source' | 'bd' | 'userstyle' | 'dev') 
                     getBDMeta()
                     + '\n\n'
                     + `@import url(${themeImport});\n\n`
-                    + compiledSCSS
+                    + compile(paths.source, { style: 'expanded' }).css
                 );
 
                 break;
             default:
-                if (!existsSync(paths.output)) {
-                    logger.notices.warning('Output folders do not exist, creating them.');
-                    mkdirSync(paths.output, { recursive: true });
-                }
-
                 writeFileSync(paths.output, compiledSCSS);
                 break;
         }
