@@ -4,10 +4,25 @@ import { themeImport, paths } from "./constants.js";
 import logger from "./logger.js";
 import { getBDMeta, getUserstyleMeta } from "./config.js";
 
+function compileSCSS() {
+    try {
+        return compile(paths.source, { style: 'expanded' }).css
+    } catch (err) {
+        if (err.message.endsWith('no such file or directory')) {
+            logger.notices.error(`${logger.dye.yellow(paths.source)} does not exist.`, true);
+        } else {
+            console.log(err.message);
+            logger.notices.error(`Something went wrong when compiling.`, true);
+        }
+
+        return null;
+    }
+}
+
 /**
  * The compiled SCSS. Only used for distribution, development will always recompile.
  */
-export const compiledSCSS = compile(paths.source, { style: 'expanded' }).css;
+export const compiledSCSS = compileSCSS();
 
 /**
  * Compiles the theme for distribution.
@@ -57,7 +72,7 @@ export async function compileTheme(type: 'source' | 'bd' | 'userstyle' | 'dev') 
                 writeFileSync(paths.dev.theme,
                     getBDMeta()
                     + '\n\n'
-                    + compile(paths.source, { style: 'expanded' }).css
+                    + compileSCSS()
                 );
 
                 break;
