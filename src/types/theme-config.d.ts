@@ -52,7 +52,7 @@ export interface ThemeConfig {
     /**
      * How the build theme should be distributed.
      */
-    dist: {
+    dist?: {
         /**
          * The file you want to target as your source file.
          * @default "src/source.scss"
@@ -84,14 +84,14 @@ export interface ThemeConfig {
     /**
      * Development enviroment.
      */
-    dev: {
+    dev?: {
         /**
          * The mod that you are compiling for.
          * If the mod is not supported by default, set to undefined and put a custom output directory.
          * NOTE: Any unsupported mod will compile without a meta, so you will have to use an SCSS file with the meta and import it (CSS compiles with comments).
          * @default undefined
          */
-        mod: SupportedDevMods | undefined;
+        mod?: SupportedDevMods | undefined;
         /**
          * The file you want to target as your source file.
          * @default "src/source.scss"

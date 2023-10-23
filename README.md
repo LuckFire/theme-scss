@@ -11,108 +11,99 @@ It should be noted this was specifically written for my own use-cases, but it sh
 
 ### Configuration
 For configuration, create a `theme-config.json` file in the root of your repository. If you want to have a custom file location, create it in whichever folder and run `theme-scss -C location/to/file.json`.
-
-#### Base
 |Value|Required|Purpose|
 |--|--|--|
-|`import`|no|A custom import URL for your theme. It'll try to default based on the author name provided, but at times you may need to provide one.|
-|`meta`|yes|The meta information. Refer to [this section](https://github.com/LuckFire/theme-scss#meta).|
-|`dist`|no|The distribution of your theme. This is what's used when the theme is being built. Refer to [this section](https://github.com/LuckFire/theme-scss#distribution).|
-|`dev`|no|For development of your theme. Refer to [this section](https://github.com/LuckFire/theme-scss#development).|
-
-#### Meta
-Some metas will use the same values since they have the same properties. If you have a `package.json` with these values, you are not required to put them in the config file. Any defaults do not have to be provided again in other metas.
-|Value|Required|Purpose|
-|--|--|--|
-|`name`|yes|The name of the theme.|
-|`author`|yes|The name of the author who created the theme.|
-|`version`|no|The current version of the theme.|
-|`description`|no|The description of the theme.|
-|`betterdiscord`|no|BetterDiscord meta. Refer to [this section](https://github.com/LuckFire/theme-scss#betterdiscord-meta).|
-|`userstyle`|no|Userstyle meta. Refer to [this section](https://github.com/LuckFire/theme-scss#userstyle-meta).|
+|`name`|✅|The name of your theme.|
+|`author`|✅|The author of your theme.|
+|`version`|✅|The version of your theme.|
+|`description`|✅|The description of your theme.|
+|`import`|✅|The import for your theme.|
+|`metas`|❌|The locations for your meta files.|
+|`dist`|❌|How the build theme should be distributed.|
+|`dev`|❌|Development enviroment.|
+`name`, `author`, `version`, `description` are all required values in the theme config, *unless* you have a `package.json` file it can reference these values from. If provided in your theme config, it will default those values instead of the `package.json` file values. If it cannot find these values, it will error.
 
 ##### Example
 ```json
 {
-    "meta": {
-        "name": "AMOLED-Cord",
-        "author": "LuckFire",
-        "description": "A basically pitch black theme for Discord. Lights out, baby!"
-    }
-}
-```
-
-#### BetterDiscord Meta
-You can find all acceptable meta tags for BetterDiscord in their [documentations page](https://docs.betterdiscord.app/developers/addons#meta).
-
-##### Example
-```json
-{
-    "meta": {
-        "name": "AMOLED-Cord",
-        "author": "LuckFire",
-        "description": "A basically pitch black theme for Discord. Lights out, baby!",
-        "betterdiscord": {
-            "invite": "vYdXbEzqDs",
-            "authorId": "399416615742996480",
-            "source": "https://github.com/LuckFire/amoled-cord",
-            "updateUrl": "https://github.com/LuckFire/amoled-cord/blob/main/clients/amoled-cord.theme.css"
+    "name": "Theme Config Testing",
+    "metas": "source/meta",
+    "dist": {
+        "clients": {
+            "compileFor": ["betterdiscord", "userstyle"]
         }
     },
-}
-```
-
-#### Userstyle Meta
-You can find all acceptable meta tags for Stylus in their [wiki documentation page](https://github.com/openstyles/stylus/wiki/Writing-UserCSS#metadata).
-
-##### Example
-```json
-{
-    "meta": {
-        "name": "AMOLED-Cord",
-        "author": "LuckFire",
-        "description": "A basically pitch black theme for Discord. Lights out, baby!",
-        "userstyle": {
-            "namespace": "https://github.com/discord-extensions/amoled-cord",
-            "license": "MIT"
-        }
+    "dev": {
+        "mod": "betterdiscord"
     }
 }
 ```
 
-#### Distribution
-This will determine where / how your theme is built. If you do not have a meta for BetterDiscord and Userstyle, it will just compile the source as is.
-|Value|Required|Purpose|
-|--|--|--|
-|`target`|no|What SCSS file should be compiled. Defaults to `src/source.scss`.|
-|`output.dir`|no|The file directory you want your compiled source in. Defaults to `src/`.|
-|`output.file`|no|What you want your compiled source file to be called. Defaults to `source.css`.|
-|`clients`|no|Where you want your client files to be exported (such as the .theme.css file for BetterDiscord).|
+#### `metas`
+If you have custom locations for all your meta `.json` files, you can specify them for each one specifically.
+|Value|Required|Purpose|Default|
+|--|--|--|--|
+|`betterdiscord`|❌|The name of your theme.|"metas/betterdiscord.json"|
+|`userstyle`|❌|The author of your theme.|"metas/userstyle.json"|
+You must provide the file extension in the path. All paths are relative to the root.
+
+#### `dist`
+|Value|Required|Purpose|Default|
+|--|--|--|--|
+|`target`|❌|The file you want to target as your source file.|"src/source.scss"|
+|`output`|❌|Where you want your compiled source file to output.|"src/source.css"|
+|`clients`|❌|Where your client files should output (if applicable).|`none`|
+
+##### `clients`
+|Value|Required|Purpose|Default|
+|--|--|--|--|
+|`output`|❌|The folder you want your client files in.|"clients"|
+|`compileFor`|❌|These are the mods it will be built for. Even if you have a meta file, you must provide this field. At the moment, this only supports `"betterdiscord"` and `"userstyle"`|`none`|
 
 ##### Example
 ```json
 {
     "dist": {
-        "output": {
-            "file": "amoled-cord.css"
+        "target": "source/source.scss",
+        "output": "dist/source.css",
+        "clients": {
+            "compileFor": ["betterdiscord", "userstyle"]
         }
     }
 }
 ```
 
-#### Development
-This will allow you to test your themes before publishing. At the moment, this only supports two client mods: BetterDiscord and Vencord.
-|Value|Required|Purpose|
-|--|--|--|
-|`mode`|no|What client mod you're developing for. Takes either `bd` or `vencord`.|
-|`target`|no|What SCSS file should be compiled. Defaults to `src/source.scss`.|
-|`output`|no|Where your dev theme should output. Will default based on mode and operating system.|
+#### `dev`
+|Value|Required|Purpose|Default|
+|--|--|--|--|
+|`mod`|❌|The client mod you're developing for.|`undefined` -- Provide a path if you're compiling for a different mod.|
+|`target`|❌|The file you want to target as your source file.|"src/source.scss"|
+|`output`|❌|Where your dev theme file should output.|Based on mod & os.|
+
+If `mod` is not provided, you will have to provide a custom path for `output`. Note that if you're working on a different mod that is not supported and it requires a meta file, you will have to figure out how to provide that meta yourself.
+
+### Client Metas
+
+#### BetterDiscord Meta
+The betterdiscord meta file must be named `betterdiscord.json` inside of the meta path you provided (default `meta/*`). You can find all acceptable meta tags for BetterDiscord in their [documentations page](https://docs.betterdiscord.app/developers/addons#meta).
 
 ##### Example
 ```json
 {
-    "dev": {
-        "mode": "vencord"
-    }
+    "invite": "vYdXbEzqDs",
+    "authorId": "399416615742996480",
+    "source": "https://github.com/LuckFire/amoled-cord",
+    "updateUrl": "https://github.com/LuckFire/amoled-cord/blob/main/clients/amoled-cord.theme.css"
+}
+```
+
+#### Userstyle Meta
+The userstyle meta file must be named `userstyle.json` inside of the meta path you provided (default `meta/*`). You can find all acceptable meta tags for Stylus in their [wiki documentation page](https://github.com/openstyles/stylus/wiki/Writing-UserCSS#metadata).
+
+##### Example
+```json
+{
+    "namespace": "https://github.com/discord-extensions/amoled-cord",
+    "license": "MIT"
 }
 ```
