@@ -124,7 +124,8 @@ export const themeImport =
  */
 export const paths = {
     themeMetas: {
-        betterdiscord: path.join(process.cwd(),
+        betterdiscord: path.join(
+            process.cwd(),
             themeConfig?.metas?.betterdiscord || 'metas/betterdiscord.json'
         ),
         userstyle: path.join(process.cwd(), themeConfig?.metas?.userstyle || 'metas/userstyle.json')

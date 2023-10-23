@@ -128,7 +128,9 @@ export function productionCompile() {
                     case 'betterdiscord':
                         const bdMeta = generateBetterDiscordMeta();
                         if (!bdMeta) {
-                            logger.notices.warning('Unable to generate BetterDiscord meta, skipping compiling for this platform.');
+                            logger.notices.warning(
+                                'Unable to generate BetterDiscord meta, skipping compiling for this platform.'
+                            );
                             continue;
                         }
 
@@ -144,14 +146,16 @@ export function productionCompile() {
                     case 'userstyle':
                         const userstyleMeta = generateUserstyleMeta();
                         if (!userstyleMeta) {
-                            logger.notices.warning('Unable to generate Userstyle meta, skipping compiling for this platform.');
+                            logger.notices.warning(
+                                'Unable to generate Userstyle meta, skipping compiling for this platform.'
+                            );
                             continue;
                         }
 
                         writeFileSync(
                             path.join(paths.dist.clients, `${themeName}.user.css`),
                             `@-moz-document domain("discord.com") {\n` +
-                            userstyleMeta.replace(/^/gm, '\t') +
+                                userstyleMeta.replace(/^/gm, '\t') +
                                 '\n' +
                                 `\n\t@import url("${themeImport}");\n\n` +
                                 compiledSCSS.replace(/^/gm, '\t') +
