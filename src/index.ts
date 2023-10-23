@@ -2,45 +2,32 @@
 
 import sade from 'sade';
 import chokidar from 'chokidar';
-import { compileTheme } from './utils/compile.js';
-import { themeConfig } from './utils/config.js';
-import logger from './utils/logger.js';
+import logger from '#utils/logger';
+import { developmentCompile, productionCompile } from '#utils/compile';
 
-const prog = sade('theme-scss')
-    .option('-C, --config', 'Set custom location for where your theme-config.json file is.');
+const prog = sade('theme-scss').option(
+    '-C, --config',
+    'Set custom location for where your theme-config.json file is.'
+);
 
-prog
-    .command('dev')
+prog.command('dev')
     .describe('Watch for changes and automatically compile them into the desired folder.')
     .action(async () => {
         chokidar
-            .watch('src/**/*.scss')
-            .on('ready', async () => {
-                logger.notices.info(`Watching ${logger.dye.yellow('src')} for changes.`);
-
-                // Compile on first initalization.
-                await compileTheme('dev');
+            .watch(['src/**.scss', 'src/**.css'])
+            .on('ready', () => {
+                logger.notices.watching(
+                    `Watching ${logger.dye.yellow('src')} for CSS/SCSS changes.`
+                );
+                developmentCompile(); // Compile on init
             })
-            .on('change', async () => {
-                await compileTheme('dev');
+            .on('change', () => {
+                developmentCompile();
             });
     });
 
-prog
-    .command('build')
+prog.command('build')
     .describe('Build the source for imports and clients.')
-    .action(async () => {
-        const types: ('source' | 'betterdiscord' | 'userstyle')[] = [ 'source' ];
-
-        if (themeConfig.meta.betterdiscord) {
-            types.push('betterdiscord');
-        }
-
-        if (themeConfig.meta.userstyle) {
-            types.push('userstyle');
-        }
-
-        await compileTheme(types);
-    });
+    .action(async () => productionCompile());
 
 prog.parse(process.argv);

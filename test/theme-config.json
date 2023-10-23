@@ -1,0 +1,11 @@
+{
+    "name": "Theme Config Testing",
+    "dist": {
+        "clients": {
+            "compileFor": ["betterdiscord", "userstyle"]
+        }
+    },
+    "dev": {
+        "mod": "betterdiscord"
+    }
+}

@@ -1,64 +1,85 @@
-import path from "path";
-import { themeConfig } from "./config.js";
-import logger from "./logger.js";
+import path from 'path';
+import logger from '#utils/logger';
+import { themeConfig } from '#utils/config';
+import type { SupportedDevMods } from '#types/theme-config.d.ts';
 
 /**
- * Gets the operating system.
+ * Gets the supported operating systems.
  */
-function getOS() {
+function supportedOS() {
     switch (process.platform) {
         case 'win32':
-            return 'WINDOWS';
         case 'darwin':
-            return 'MACOS';
         case 'linux':
-            return 'LINUX';
-        default: 
-            logger.notices.error(`${process.platform} is not supported for development.`, true);
+            return process.platform;
+        default:
+            if (!themeConfig.dev?.output) {
+                logger.notices.error(
+                    `${process.platform} is not supported for development. Please provide a custom output path for development instead.`
+                );
+            }
+
             return null;
     }
 }
 
-export const OS = getOS();
+/**
+ * Runs the function to get the operating system.
+ */
+const OS = supportedOS();
 
 /**
  * Gets the theme folder for a specific client mod.
  */
-export function getThemeFolder(mod: 'bd' | 'vencord') {
-    let folder: string | undefined = themeConfig.dev?.output;
+export function getThemeFolder(mod: SupportedDevMods) {
+    // A path was specificed so we use that instead.
+    if (themeConfig.dev?.output) return themeConfig.dev?.output;
 
-    // A path was already specificed
-    if (folder) return folder;
+    let file: string;
 
-    switch (mod){
-        case 'bd':
-            if (OS === 'WINDOWS') {
-                folder = path.resolve(process.env.APPDATA, 'BetterDiscord', 'themes');
-            }
-            else if (OS === 'MACOS') {
-                folder = path.resolve(process.env.HOME, 'Library', 'Application Support', 'BetterDiscord', 'themes');
-            }
-            else if (OS === 'LINUX') {
-                folder = path.resolve(process.env.HOME, '.local', 'share', 'BetterDiscord', 'themes');
+    switch (mod) {
+        case 'betterdiscord':
+            if (OS === 'win32') {
+                file = path.resolve(process.env.APPDATA, 'BetterDiscord', 'themes');
+            } else if (OS === 'darwin') {
+                file = path.resolve(
+                    process.env.HOME,
+                    'Library',
+                    'Application Support',
+                    'BetterDiscord',
+                    'themes'
+                );
+            } else if (OS === 'linux') {
+                file = path.resolve(process.env.HOME, '.local', 'share', 'BetterDiscord', 'themes');
             }
 
             break;
         case 'vencord':
-            if (OS === 'WINDOWS') {
-                folder = path.resolve(process.env.APPDATA, 'Vencord', 'themes');
-            }
-            else if (OS === 'MACOS') {
-                folder = path.resolve(process.env.HOME, 'Library', 'Application Support', 'Vencord', 'themes');
-            }
-            else if (OS === 'LINUX') {
-                folder = path.resolve(process.env.HOME, 'user', '.config', 'Vencord', 'themes');
+            if (OS === 'win32') {
+                file = path.resolve(process.env.APPDATA, 'Vencord', 'themes');
+            } else if (OS === 'darwin') {
+                file = path.resolve(
+                    process.env.HOME,
+                    'Library',
+                    'Application Support',
+                    'Vencord',
+                    'themes'
+                );
+            } else if (OS === 'linux') {
+                file = path.resolve(process.env.HOME, 'user', '.config', 'Vencord', 'themes');
             }
 
             break;
         default:
-            logger.notices.error(`${mod} is not supported for development.`, true);
+            logger.notices.error(
+                `${mod} is not supported for development. Please provide a custom path instead.`,
+                true
+            );
+
             return;
     }
 
-    return folder;
+    file = path.join(file, `${null}.theme.css`);
+
+    return file;
 }

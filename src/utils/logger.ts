@@ -10,6 +10,15 @@ function compiling(message: string) {
 }
 
 /**
+ * Log a watching notice message.
+ * @param message The message to log.
+ */
+function watching(message: string) {
+    const tag = chalk.bold.blue('[WATCHING]');
+    console.log(tag, message);
+}
+
+/**
  * Log an info message.
  * @param message The message to log.
  */
@@ -17,7 +26,6 @@ function info(message: string) {
     const tag = chalk.bold.blue('[INFO]');
     console.log(tag, message);
 }
-
 
 /**
  * Log a success message.
@@ -60,6 +68,7 @@ function yellow(text: string) {
 export default {
     notices: {
         compiling,
+        watching,
         info,
         success,
         warning,
@@ -68,4 +77,4 @@ export default {
     dye: {
         yellow
     }
-}
+};

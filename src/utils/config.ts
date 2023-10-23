@@ -1,22 +1,27 @@
-import path from "path";
-import { readFileSync } from "fs";
-import logger from "./logger.js";
-import { ThemeConfig } from "../types/config.js";
+import path from 'path';
+import { readFileSync } from 'fs';
+import { getThemeFolder } from '#utils/os';
+import logger from '#utils/logger';
+import type { ThemeConfig } from '#types/theme-config.d.ts';
+
+type MetaDefaultValues = 'name' | 'author' | 'description' | 'version';
+
+const configPath = path.join(process.cwd(), process.argv[4] || 'theme-config.json');
 
 /**
- * Fetches the config file.
- * Not exported since once it's fetched, it shouldnt have to be fetched again.
+ * Fetched the config file contents.
  */
-function config() {
+function getConfig() {
     try {
-        const config = JSON.parse(
-            readFileSync(path.resolve(process.argv[4] || 'theme-config.json'), 'utf-8')
-        );
+        const config = JSON.parse(readFileSync(configPath, 'utf-8'));
 
-        return config as ThemeConfig
+        return config as ThemeConfig;
     } catch (err) {
         if (err.code === 'ENOENT') {
-            logger.notices.error(`Unable to locate your ${logger.dye.yellow('theme-config.json')} file. Double check that it exists.`, true);
+            logger.notices.error(
+                `Unable to locate ${logger.dye.yellow(configPath)}. Double check that it exists.`,
+                true
+            );
             return null;
         }
 
@@ -26,105 +31,111 @@ function config() {
 }
 
 /**
- * Fetches the config file.
+ * Cached config file information so there's no need to refetch.
  */
-export const themeConfig = config();
+export const themeConfig = getConfig();
 
 /**
- * Generates a list of meta details for parsing later.
- * @param meta A meta's object.
+ * Get information that's used in all metas (name, author, version, description).
  */
-function metaList(meta: { [key: string]: any }) {
-    const details: string[] = [];
+function defaultInfo() {
+    const { name, author, description, version } = themeConfig;
+    const defaults: { [key in MetaDefaultValues]: string } = { name, author, description, version };
 
-    for (const [k, v] of Object.entries(meta)) {
-        details.push(`${k} ${v}`);
-    }
-
-    return details;
-}
-
-function getDefaultValues() {
-    const { name, author, description, version } = themeConfig.meta;
-    const meta = { name, author, description, version };
-    const missing = [];
-
-    // Create a list of missing default meta values
-    for (const [k, v] of Object.entries(meta)) {
+    // Creates a list of missing meta default values.
+    const missing: Partial<MetaDefaultValues[]> = [];
+    for (const [k, v] of Object.entries(defaults)) {
         if (v) continue;
-        missing.push(k);
+        missing.push(k as MetaDefaultValues);
     }
 
-    // If there are any missing values, it'll check the package.json instead to fill them.
+    // If there are missing values that are required, it will check a package.json file.
     if (missing.length) {
         try {
-            const packageInfo = JSON.parse(readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'));
+            const packageJson = JSON.parse(
+                readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8')
+            );
 
             for (const value of Object.values(missing)) {
-                if (!packageInfo[value]) {
-                    // Since description isn't required, it'll just remove it.
+                if (!packageJson[value]) {
+                    // A description isn't a required value, so it's ignored and removed from defaults if not found.
                     if (value === 'description') {
-                        delete meta[value];
+                        delete defaults[value];
                         missing.splice(missing.indexOf(value), 1);
                     }
 
                     continue;
                 }
-                
-                meta[value] = packageInfo[value];
+
+                defaults[value] = packageJson[value];
                 missing.splice(missing.indexOf(value), 1);
             }
 
-            // If it was unable to fill these values, it'll error and stop.
+            // If it still wasnt able to replace missing values, it'll error and stop.
             if (missing.length) {
-                logger.notices.error(`You are missing some meta values (${missing.join(', ')}). There was an attempt to check for an existing ${logger.dye.yellow('package.json')} to automatically fill them, but it did not have some of the required ones.`, true);
-                return null;
+                logger.notices.error(
+                    `You are missing some meta values (${missing.join(
+                        ', '
+                    )}). There was an attempt to use your ${logger.dye.yellow(
+                        'package.json'
+                    )} file, but it was missing these values as well.`,
+                    true
+                );
             }
         } catch (err) {
-            logger.notices.error(`You are missing some meta values (${missing.join(', ')}). There was an attempt to check for an existing ${logger.dye.yellow('package.json')} to automatically fill them, but something went wrong.`, true);
-            return null;
+            console.log(err);
+
+            logger.notices.error(
+                `You are missing some meta values (${missing.join(
+                    ', '
+                )}). There was an attempt to use your ${logger.dye.yellow(
+                    'package.json'
+                )} file, but it appears to not exist.`,
+                true
+            );
         }
     }
 
-    return meta;
+    return defaults;
 }
 
-export const defaultValues = getDefaultValues();
+export const defaultMetaInfo = defaultInfo();
 
 /**
- * Fetches the default meta information.
- * Not exported since once it's fetched, it shouldnt have to be fetched again.
+ * Cached default information so there's no need to refetch.
  */
-const defaultMeta = metaList(defaultValues);
+export const defaults = {
+    ...defaultMetaInfo,
+    dist: {
+        output: themeConfig.dist.output || 'src/source.css',
+        target: themeConfig.dist.target || 'src/source.scss'
+    }
+};
+
+export const themeName = defaults.name.toLowerCase().replaceAll(' ', '-');
+export const themeImport =
+    themeConfig.import ||
+    `https://${defaults.author.toLowerCase().replaceAll(' ', '-')}.github.io/${themeName}/${
+        defaults.dist.output
+    }`;
 
 /**
- * Gets the BetterDiscord meta.
+ * Path file locations for files.
  */
-export function getBDMeta() {
-    const { betterdiscord } = themeConfig.meta;
-
-    const style = `\n * @`;
-    const meta = [ ...defaultMeta, ...metaList(betterdiscord) ]
-        .join(style);
-
-    return `/**`
-        + style
-        + meta
-        + `\n */`;
-}
-
-/**
- * Gets the Userstyle meta.
- */
-export function getUserstyleMeta() {
-    const { userstyle } = themeConfig.meta;
-
-    const style = `\n\t@`;
-    const meta = [ ...defaultMeta, ...metaList(userstyle) ]
-        .join(style);
-
-    return `\t/* ==UserStyle==`
-        + style
-        + meta
-        + `\n\t==/UserStyle== */`
-}
+export const paths = {
+    themeMetas: {
+        betterdiscord: path.resolve(
+            themeConfig?.metas?.betterdiscord || 'metas/betterdiscord.json'
+        ),
+        userstyle: path.resolve(themeConfig?.metas?.userstyle || 'metas/userstyle.json')
+    },
+    dist: {
+        output: path.resolve(themeConfig.dist.output || 'src/source.css'),
+        target: path.resolve(themeConfig.dist.target || 'src/source.scss'),
+        clients: path.resolve(themeConfig.dist.clients?.output || 'clients')
+    },
+    dev: {
+        target: path.resolve(themeConfig.dev?.target || 'src/source.scss'),
+        output: getThemeFolder(themeConfig.dev?.mod || undefined)
+    }
+};

@@ -8,6 +8,10 @@
 		"moduleResolution": "NodeNext",
 		"rootDir": "./src",
 		"baseUrl": ".",
-		"outDir": "dist"
+		"outDir": "dist",
+		"paths": {
+			"#utils/*": ["src/utils/*"],
+			"#types/*": ["src/types/*"]
+		}
 	}
 }

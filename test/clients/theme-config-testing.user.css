@@ -1,0 +1,16 @@
+@-moz-document domain("discord.com") {
+	/* ==UserStyle==
+	@name Theme Config Testing
+	@author LuckFire
+	@description test
+	@version 0.0.0
+	@namespace https://github.com/discord-extensions/amoled-cord
+	@license MIT
+	==/UserStyle== */
+
+	@import url("https://luckfire.github.io/theme-config-testing/src/source.css");
+
+	.element {
+	  background-color: red;
+	}
+}

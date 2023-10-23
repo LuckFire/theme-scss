@@ -1,18 +1,22 @@
 {
   "name": "theme-scss",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "author": "LuckFire",
   "description": "",
   "main": "dist/index.js",
   "type": "module",
+  "imports": {
+    "#utils/*": "./dist/utils/*.js",
+    "#types/*": "./src/types/*"
+  },
   "bin": {
     "theme-scss": "./dist/index.js"
   },
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc -b"
+    "build": "npm run format && tsc -b",
+    "format": "prettier --config .prettierrc.json ./src/**/*.ts --write"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "dependencies": {
     "chokidar": "^3.5.3",
@@ -22,6 +26,7 @@
   "devDependencies": {
     "@types/node": "^20.6.3",
     "chalk": "^5.3.0",
+    "prettier": "^3.0.3",
     "typescript": "^5.2.2"
   }
 }
