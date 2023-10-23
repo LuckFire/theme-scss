@@ -85,6 +85,8 @@ You must provide the file extension in the path. All paths are relative to the r
 If `mod` is not provided, you will have to provide a custom path for `output`. Note that if you're working on a different mod that is not supported and it requires a meta file, you will have to figure out how to provide that meta yourself.
 
 ### Client Metas
+Note that `name`, `author`, `version`, `description` are not required in the meta files since they're references from `theme-config.json` or your `package.json` file.
+
 #### BetterDiscord Meta
 The betterdiscord meta file must be named `betterdiscord.json` inside of the meta path you provided (default `meta/*`). You can find all acceptable meta tags for BetterDiscord in their [documentations page](https://docs.betterdiscord.app/developers/addons#meta).
 
