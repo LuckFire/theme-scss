@@ -37,21 +37,21 @@ export function generateBetterDiscordMeta() {
 
         return `/**` + style + info + `\n*/`;
     } catch (err) {
-        console.log(err);
-
         logger.notices.error(
             `Your ${logger.dye.yellow(
                 'betterdiscord.json'
             )} meta file does not exist, so a meta cannot be generated.`
         );
     }
+
+    return null;
 }
 
 /**
  * Generates a Userstyle meta.
  * This is only ran if 'userstyle' is provided in compileFor in the theme-config.
  */
-export function generateUserstylMeta() {
+export function generateUserstyleMeta() {
     try {
         const meta = JSON.parse(readFileSync(paths.themeMetas.userstyle, 'utf-8'));
 
@@ -66,4 +66,6 @@ export function generateUserstylMeta() {
             )} meta file does not exist, so a meta cannot be generated.`
         );
     }
+
+    return null;
 }

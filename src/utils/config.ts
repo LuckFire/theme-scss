@@ -124,10 +124,10 @@ export const themeImport =
  */
 export const paths = {
     themeMetas: {
-        betterdiscord: path.resolve(
+        betterdiscord: path.join(process.cwd(),
             themeConfig?.metas?.betterdiscord || 'metas/betterdiscord.json'
         ),
-        userstyle: path.resolve(themeConfig?.metas?.userstyle || 'metas/userstyle.json')
+        userstyle: path.join(process.cwd(), themeConfig?.metas?.userstyle || 'metas/userstyle.json')
     },
     dist: {
         output: path.resolve(themeConfig.dist.output || 'src/source.css'),

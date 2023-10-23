@@ -2,7 +2,7 @@ import path from 'path';
 import { compile } from 'sass';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import logger from '#utils/logger';
-import { generateBetterDiscordMeta, generateUserstylMeta } from '#utils/meta';
+import { generateBetterDiscordMeta, generateUserstyleMeta } from '#utils/meta';
 import { themeConfig, paths, themeImport, themeName } from '#utils/config';
 
 /**
@@ -126,6 +126,12 @@ export function productionCompile() {
 
                 switch (platform) {
                     case 'betterdiscord':
+                        const bdMeta = generateBetterDiscordMeta();
+                        if (!bdMeta) {
+                            logger.notices.warning('Unable to generate BetterDiscord meta, skipping compiling for this platform.');
+                            continue;
+                        }
+
                         writeFileSync(
                             path.join(paths.dist.clients, `${themeName}.theme.css`),
                             generateBetterDiscordMeta() +
@@ -136,10 +142,16 @@ export function productionCompile() {
 
                         continue;
                     case 'userstyle':
+                        const userstyleMeta = generateUserstyleMeta();
+                        if (!userstyleMeta) {
+                            logger.notices.warning('Unable to generate Userstyle meta, skipping compiling for this platform.');
+                            continue;
+                        }
+
                         writeFileSync(
                             path.join(paths.dist.clients, `${themeName}.user.css`),
                             `@-moz-document domain("discord.com") {\n` +
-                                generateUserstylMeta().replace(/^/gm, '\t') +
+                            userstyleMeta.replace(/^/gm, '\t') +
                                 '\n' +
                                 `\n\t@import url("${themeImport}");\n\n` +
                                 compiledSCSS.replace(/^/gm, '\t') +
