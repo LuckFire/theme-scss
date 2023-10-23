@@ -21,6 +21,7 @@ For configuration, create a `theme-config.json` file in the root of your reposit
 |`metas`|❌|The locations for your meta files.|
 |`dist`|❌|How the build theme should be distributed.|
 |`dev`|❌|Development enviroment.|
+
 `name`, `author`, `version`, `description` are all required values in the theme config, *unless* you have a `package.json` file it can reference these values from. If provided in your theme config, it will default those values instead of the `package.json` file values. If it cannot find these values, it will error.
 
 ##### Example
@@ -45,6 +46,7 @@ If you have custom locations for all your meta `.json` files, you can specify th
 |--|--|--|--|
 |`betterdiscord`|❌|The name of your theme.|"metas/betterdiscord.json"|
 |`userstyle`|❌|The author of your theme.|"metas/userstyle.json"|
+
 You must provide the file extension in the path. All paths are relative to the root.
 
 #### `dist`
@@ -83,7 +85,6 @@ You must provide the file extension in the path. All paths are relative to the r
 If `mod` is not provided, you will have to provide a custom path for `output`. Note that if you're working on a different mod that is not supported and it requires a meta file, you will have to figure out how to provide that meta yourself.
 
 ### Client Metas
-
 #### BetterDiscord Meta
 The betterdiscord meta file must be named `betterdiscord.json` inside of the meta path you provided (default `meta/*`). You can find all acceptable meta tags for BetterDiscord in their [documentations page](https://docs.betterdiscord.app/developers/addons#meta).
 
