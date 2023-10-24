@@ -1,6 +1,6 @@
 import path from 'path';
 import logger from '#utils/logger';
-import { themeConfig } from '#utils/config';
+import { themeConfig, themeName } from '#utils/config';
 import type { SupportedDevMods } from '#types/theme-config.d.ts';
 
 /**
@@ -79,7 +79,7 @@ export function getThemeFolder(mod: SupportedDevMods) {
             return;
     }
 
-    file = path.join(file, `${null}.theme.css`);
+    file = path.join(file, `${themeName}.theme.css`);
 
     return file;
 }
