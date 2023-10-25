@@ -131,8 +131,8 @@ export const paths = {
         userstyle: path.join(process.cwd(), themeConfig?.metas?.userstyle || 'metas/userstyle.json')
     },
     dist: {
-        output: path.resolve(themeConfig.dist.output || 'src/source.css'),
-        target: path.resolve(themeConfig.dist.target || 'src/source.scss'),
+        output: path.resolve(themeConfig.dist?.output || 'src/source.css'),
+        target: path.resolve(themeConfig.dist?.target || 'src/source.scss'),
         clients: path.resolve(themeConfig.dist.clients?.output || 'clients')
     },
     dev: {
